@@ -1,0 +1,53 @@
+{
+  "name": "rentpaymenthistory",
+  "version": "1.0.0",
+  "description": "This is an API to store,fetch the rent payment history of a tenant",
+  "main": "./src/infrastructure/handler.ts",
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "prebuild": "npm run clean",
+    "build": "webpack",
+    "test": "jest --passWithNoTests",
+    "lint": "eslint --max-warnings 0 --ext .js,.jsx,.ts,.tsx ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bhuvinth/rentPaymentHistory.git"
+  },
+  "author": "bhuvin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bhuvinth/rentPaymentHistory/issues"
+  },
+  "homepage": "https://github.com/bhuvinth/rentPaymentHistory#readme",
+  "dependencies": {
+    "typeorm": "^0.2.20"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "@typescript-eslint/eslint-plugin": "^3.3.0",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "17.1.1",
+    "eslint-config-airbnb-typescript": "^4.0.1",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.15.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.2",
+    "install-peerdeps": "^1.10.2",
+    "jest": "^24.8.0",
+    "prettier": "^1.17.0",
+    "rimraf": "^2.6.3",
+    "sqlite3": "^4.2.0",
+    "ts-jest": "^24.0.2",
+    "ts-loader": "^5.3.3",
+    "ts-mockito": "^2.3.1",
+    "ts-node": "^8.5.2",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.2.4",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.11"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "baseUrl": "../src/"
+  },
+  "include": ["./**/*", "./../__mocks__/**/*", "../src/**/*"]
+}
