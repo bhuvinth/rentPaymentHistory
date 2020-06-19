@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'rent_payments' })
-export default class RentPaymentData {
+export default class RentPaymentHistoryDTO {
   @PrimaryGeneratedColumn()
   public id!: number;
 

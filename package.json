@@ -4,6 +4,7 @@
   "description": "This is an API to store,fetch the rent payment history of a tenant",
   "main": "./src/infrastructure/handler.ts",
   "scripts": {
+    "build-graphql": "graphql-codegen --config ./src/infrastructure/graphQL/schemaAndTypes/codegen.yml",
     "clean": "rimraf ./dist",
     "prebuild": "npm run clean",
     "build": "webpack",
@@ -21,6 +22,9 @@
   },
   "homepage": "https://github.com/bhuvinth/rentPaymentHistory#readme",
   "dependencies": {
+    "graphql": "^14.4.2",
+    "graphql-tag": "^2.10.3",
+    "graphql-tools": "^4.0.5",
     "typeorm": "^0.2.20"
   },
   "devDependencies": {
@@ -48,6 +52,13 @@
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.2.4",
     "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "@graphql-codegen/add": "^1.5.0",
+    "@graphql-codegen/cli": "^1.5.0",
+    "@graphql-codegen/introspection": "^1.5.0",
+    "@graphql-codegen/schema-ast": "^1.9.1",
+    "@graphql-codegen/typescript": "^1.5.0",
+    "@graphql-codegen/typescript-operations": "^1.5.0",
+    "@graphql-codegen/typescript-resolvers": "^1.5.0"
   }
 }
