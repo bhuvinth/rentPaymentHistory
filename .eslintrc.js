@@ -1,15 +1,5 @@
 const tsconfig = require('./tsconfig.json');
 
-const createEslintModuleMapsForLinting = () => {
-  const resp = Object.entries(tsconfig.compilerOptions.paths).map(([k, [v]]) => [
-    k,
-    `./src/${v.replace(/\*/, '')}`,
-  ]);
-  return resp;
-};
-
-const moduleNameMapper = createEslintModuleMapsForLinting();
-
 module.exports = {
   extends: ['airbnb', 'airbnb-typescript/base', 'prettier'],
   plugins: ['import','prettier', 'jest'],
@@ -47,12 +37,5 @@ module.exports = {
         ]
       },
     }
-    // 'import/resolver': {
-    //   typescript: {},
-    //   // alias: {
-    //   //   map: moduleNameMapper,
-    //   //   extensions: ['.ts', '.js', '.jsx', '.json'],
-    //   // },
-    // },
   },
 };
