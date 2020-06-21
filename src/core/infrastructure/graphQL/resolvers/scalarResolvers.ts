@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { GraphQLScalarType } from 'graphql';
-import { Resolvers } from '../schemaAndTypes/rentPaymentGraphQlGeneratedTypes';
+import { Resolvers } from '@core/infrastructure/graphQL/schemaAndTypes';
 
 const scalarResolvers: Resolvers = {
   Date: new GraphQLScalarType({

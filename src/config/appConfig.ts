@@ -11,4 +11,8 @@ export default class AppConfig {
     password: process.env.DATABASE_PASSWORD,
     schemaName: process.env.DATABASE_SCHEMA_NAME,
   };
+
+  public static authToken = process.env.AUTH_TOKEN;
+
+  public static serverPort = process.env.PORT;
 }

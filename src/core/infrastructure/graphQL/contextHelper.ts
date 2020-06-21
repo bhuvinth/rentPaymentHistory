@@ -1,7 +1,8 @@
-import Auth0Provider from '../../../authenticationProviders/auth0.provider';
-import Logger from '../../../utils/logger';
-import databaseConnectionManager from '../../../database/databaseConnectionManager';
-import AuthenticationProviderInterface from '../../../authenticationProviders/authenticationProviderInterface';
+import Auth0Provider from '@authenticationProviders/auth0.provider';
+import Logger from '@utils/logger';
+import databaseConnectionManager from '@databaseConfiguration/databaseConnectionManager';
+import AuthenticationProviderInterface from '@authenticationProviders/authenticationProviderInterface';
+import AuthenticationError from '@main/common/authenticationError';
 
 export type ServiceResolverContext = {
   isAuthenticated: boolean;
@@ -9,12 +10,11 @@ export type ServiceResolverContext = {
 };
 
 export const validateContext = (ctx: ServiceResolverContext) => {
-  console.log(ctx);
+  if (!ctx.isAuthenticated) {
+    throw new AuthenticationError();
+  }
   if (ctx.contextCreationError) {
     throw new Error(ctx.contextCreationError);
-  }
-  if (!ctx.isAuthenticated) {
-    throw new Error('Authentication Error');
   }
 };
 
@@ -39,7 +39,7 @@ export default async function createApolloContextProvider(
     token = event.headers.authorization || event.headers.Authorization;
     const isTokenValidated = await authenticationProvider.isTokenValid(token);
     if (!token || !isTokenValidated) {
-      throw new Error('coonectionError');
+      throw new AuthenticationError();
     }
     isAuthenticated = true;
   } catch (err) {

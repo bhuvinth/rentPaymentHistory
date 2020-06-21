@@ -1,8 +1,8 @@
-import { RentPayment } from '../infrastructure/graphQL/schemaAndTypes';
-import RentPaymentHistory from '../domain/rentPaymentHistory';
-import RentPaymentHistoryDTO from '../infrastructure/database/rentPaymentHistoryDTO';
-import ContractId from '../domain/valueObjects/contractId';
-import RentAmount from '../domain/valueObjects/rentAmount';
+import { RentPayment } from '@core/infrastructure/graphQL/schemaAndTypes';
+import RentPaymentHistory from '@core/domain/rentPaymentHistory';
+import RentPaymentHistoryDTO from '@core/infrastructure/database/rentPaymentHistoryDTO';
+import ContractId from '@core/domain/valueObjects/contractId';
+import RentAmount from '@core/domain/valueObjects/rentAmount';
 
 export default class RentPaymentHistoryMapper {
   public static fromDomainToDTO(rentPaymentDomainObj: RentPaymentHistory): RentPaymentHistoryDTO {

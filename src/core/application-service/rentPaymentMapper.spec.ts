@@ -1,5 +1,5 @@
-import RentPaymentHistoryMapper from './rentPaymentMapper';
 import RentPaymentHistory from '../domain/rentPaymentHistory';
+import RentPaymentHistoryMapper from './rentPaymentMapper';
 import { RentPaymentInput } from '../infrastructure/graphQL/schemaAndTypes';
 import RentPaymentHistoryDTO from '../infrastructure/database/rentPaymentHistoryDTO';
 

@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import RentPaymentHistoryService from '../../../application-service/rentPaymentHistoryService';
-import { ServiceResolverContext, validateContext } from '../contextHelper';
 import {
   Resolvers,
   RentPaymentInput,
   RentPaymentUpdateInput,
   QueryGetTotalRentPaymentArgs,
-} from '../schemaAndTypes';
+} from '@core/infrastructure/graphQL/schemaAndTypes';
+import RentPaymentHistoryService from '@core/application-service/rentPaymentHistoryService';
+import {
+  ServiceResolverContext,
+  validateContext,
+} from '@core/infrastructure/graphQL/contextHelper';
 
 const resolvers: Resolvers<ServiceResolverContext> = {
   Query: {

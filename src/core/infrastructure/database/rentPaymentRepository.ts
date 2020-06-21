@@ -1,4 +1,8 @@
 import { getRepository, Repository, Between } from 'typeorm';
+import Logger from '@main/utils/logger';
+import RentPaymentSaveError from '@core/infrastructure/errors/rentPaymentSaveError';
+import UnableToFetchRentPayments from '@core/infrastructure/errors/unableToFetchRentPaymentError';
+import UnableToDeleteRentPayments from '@core/infrastructure/errors/unableToDeleteRentPayment';
 import RentPaymentHistoryDTO from './rentPaymentHistoryDTO';
 import RentPaymentRepositoryInterface from './rentPaymentRepositoryInterface';
 
@@ -16,8 +20,8 @@ export default class RentPaymentRepository implements RentPaymentRepositoryInter
       const savedRentPayment = await this.repository.save(rentPaymentDataObj);
       return savedRentPayment;
     } catch (error) {
-      // console.log(error);
-      throw error;
+      Logger.error(error);
+      throw new RentPaymentSaveError(error);
     }
   }
 
@@ -40,8 +44,8 @@ export default class RentPaymentRepository implements RentPaymentRepositoryInter
       const updatedData = await this.repository.findOneOrFail(rentPaymentDataObj.id);
       return updatedData;
     } catch (error) {
-      // console.log(error);
-      throw error;
+      Logger.error(error);
+      throw new RentPaymentSaveError(error);
     }
   }
 
@@ -55,8 +59,8 @@ export default class RentPaymentRepository implements RentPaymentRepositoryInter
       await this.repository.update(rentPaymentId, foundResult);
       return true;
     } catch (error) {
-      // console.log(error);
-      throw error;
+      Logger.error(error);
+      throw new UnableToDeleteRentPayments(error);
     }
   }
 
@@ -75,7 +79,8 @@ export default class RentPaymentRepository implements RentPaymentRepositoryInter
         order: { paymentDate: 'DESC' },
       });
     } catch (error) {
-      throw error;
+      Logger.error(error);
+      throw new UnableToFetchRentPayments(error);
     }
   }
 

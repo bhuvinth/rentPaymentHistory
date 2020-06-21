@@ -1,11 +1,11 @@
 import { Connection, createConnection } from 'typeorm';
-import RentPaymentHistoryDTO from '../infrastructure/database/rentPaymentHistoryDTO';
-import RentPaymentHistoryService from './rentPaymentHistoryService';
 import {
   RentPaymentInput,
   RentPayment,
   RentPaymentUpdateInput,
 } from '../infrastructure/graphQL/schemaAndTypes';
+import RentPaymentHistoryDTO from '../infrastructure/database/rentPaymentHistoryDTO';
+import RentPaymentHistoryService from './rentPaymentHistoryService';
 
 describe('Test RentPaymentApplication Service', () => {
   let connection: Connection = null;

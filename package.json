@@ -9,6 +9,7 @@
     "prebuild": "npm run clean",
     "build": "webpack --config ./webpack.config.js --mode production",
     "test": "jest --passWithNoTests",
+    "dev": "ts-node -r tsconfig-paths/register ./src/core/infrastructure/server.ts ",
     "lint": "eslint --max-warnings 0 --ext .js,.jsx,.ts,.tsx ./"
   },
   "repository": {
