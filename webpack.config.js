@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 
 const { resolve } = require('path');
+const nodeExternals = require('webpack-node-externals');
 const tsconfig = require('./tsconfig.json');
 
 const parseKey = key => key.match(/(@.*)\/\*$/)[1];
@@ -37,5 +38,5 @@ module.exports = {
       },
     ],
   },
-  externals: ['utf-8-validate', 'bufferutil'],
+  externals: ['utf-8-validate', 'bufferutil', nodeExternals()],
 };
