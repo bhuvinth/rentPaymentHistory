@@ -1,9 +1,8 @@
 import { GraphQLSchema } from 'graphql';
 import { makeExecutableSchema } from 'graphql-tools';
 
-import rentPaymentResolvers from './rentPaymentResolvers';
-import scalarResolvers from './scalarResolvers';
-// import createResolvers from './createResolvers';
+import rentPaymentResolvers from './resolvers/rentPaymentResolvers';
+import scalarResolvers from './resolvers/scalarResolvers';
 import { rentPaymentSchema } from './schemaAndTypes/schema';
 
 /**
