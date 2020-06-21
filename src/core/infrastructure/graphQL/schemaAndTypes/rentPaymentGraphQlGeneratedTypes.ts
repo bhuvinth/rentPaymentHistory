@@ -15,11 +15,8 @@ export type Scalars = {
   Float: number;
   /** An ISO-8601 encoded UTC date string. Example: `"2018-06-11T00:00:00.000Z"`. */
   Date: Date;
-  /** A signed decimal number, which supports arbitrary precision and is serialized as a string. Example: `"29.99"`. */
-  Decimal: number;
   Optional: any;
 };
-
 
 
 export type Mutation = {
@@ -74,18 +71,21 @@ export type RentPaymentInput = {
   description?: Maybe<Scalars['String']>;
   value: Scalars['Int'];
   isImported: Scalars['Boolean'];
+  time: Scalars['Date'];
 };
 
 export type RentPaymentUpdateInput = {
   description?: Maybe<Scalars['String']>;
   value: Scalars['Int'];
   isImported: Scalars['Boolean'];
+  rentId: Scalars['Int'];
+  time?: Maybe<Scalars['Date']>;
 };
 
 export type TotalRentPayment = {
   __typename?: 'totalRentPayment';
   sum: Scalars['Int'];
-  rentPayments?: Maybe<Array<Maybe<RentPayment>>>;
+  items?: Maybe<Array<Maybe<RentPayment>>>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -177,7 +177,6 @@ export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>;
   RentPaymentInput: RentPaymentInput;
   RentPaymentUpdateInput: RentPaymentUpdateInput;
-  Decimal: ResolverTypeWrapper<Scalars['Decimal']>;
   Optional: ResolverTypeWrapper<Scalars['Optional']>;
 }>;
 
@@ -193,16 +192,11 @@ export type ResolversParentTypes = ResolversObject<{
   Mutation: {};
   RentPaymentInput: RentPaymentInput;
   RentPaymentUpdateInput: RentPaymentUpdateInput;
-  Decimal: Scalars['Decimal'];
   Optional: Scalars['Optional'];
 }>;
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
-}
-
-export interface DecimalScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Decimal'], any> {
-  name: 'Decimal';
 }
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -233,13 +227,12 @@ export type RentPaymentResolvers<ContextType = any, ParentType extends Resolvers
 
 export type TotalRentPaymentResolvers<ContextType = any, ParentType extends ResolversParentTypes['totalRentPayment'] = ResolversParentTypes['totalRentPayment']> = ResolversObject<{
   sum?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  rentPayments?: Resolver<Maybe<Array<Maybe<ResolversTypes['RentPayment']>>>, ParentType, ContextType>;
+  items?: Resolver<Maybe<Array<Maybe<ResolversTypes['RentPayment']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
   Date?: GraphQLScalarType;
-  Decimal?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Optional?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;

@@ -27,12 +27,13 @@ describe('Test Rent Payment Repository for Different methods', () => {
   async function addInitialRecordAndTest(
     contractId = 1,
     rentAmount = 500,
+    paymentDate = new Date(),
   ): Promise<RentPaymentHistoryDTO> {
     const rentPaymentRepository = new RentPaymentRepository();
     const mockData = new RentPaymentHistoryDTO();
     mockData.contractId = contractId;
     mockData.description = 'description';
-    mockData.paymentDate = new Date();
+    mockData.paymentDate = paymentDate;
     mockData.rentAmount = rentAmount;
     mockData.isImported = false;
 
@@ -192,17 +193,39 @@ describe('Test Rent Payment Repository for Different methods', () => {
   test('Get RentPayment by passing valid contractId, should get all the relevant rent payments', async () => {
     const rentPaymentRepository = new RentPaymentRepository();
     const mockContractId = 100;
-    const savedRentPaymentDataRecord1 = await addInitialRecordAndTest(mockContractId, 1000);
-    const savedRentPaymentDataRecord2 = await addInitialRecordAndTest(mockContractId, -1000);
+    const mockStartDate = new Date('2020-01-01');
+    const mockEndDate = new Date('2020-01-10');
+    const mockOutOfRangeDate = new Date('2020-02-01');
+    const savedRentPaymentDataRecord1 = await addInitialRecordAndTest(
+      mockContractId,
+      1000,
+      mockStartDate,
+    );
+    const savedRentPaymentDataRecord2 = await addInitialRecordAndTest(
+      mockContractId,
+      -1000,
+      mockEndDate,
+    );
+    const savedRentPaymentDataRecordOutOfRange = await addInitialRecordAndTest(
+      mockContractId,
+      1000,
+      mockOutOfRangeDate,
+    );
 
     const recordsForContractId = await rentPaymentRepository.getAllRentPaymentsForContractId(
       mockContractId,
+      new Date('2019-12-31'),
+      new Date('2020-01-11'),
     );
+
     expect(recordsForContractId).toBeTruthy();
     expect(recordsForContractId.length).toEqual(2);
-    expect(recordsForContractId[0].contractId).toEqual(savedRentPaymentDataRecord1.contractId);
-    expect(recordsForContractId[1].contractId).toEqual(savedRentPaymentDataRecord2.contractId);
-    expect(recordsForContractId[0].rentAmount).toEqual(savedRentPaymentDataRecord1.rentAmount);
-    expect(recordsForContractId[1].rentAmount).toEqual(savedRentPaymentDataRecord2.rentAmount);
+    expect(recordsForContractId[1].contractId).toEqual(savedRentPaymentDataRecord1.contractId);
+    expect(recordsForContractId[0].contractId).toEqual(savedRentPaymentDataRecord2.contractId);
+    expect(recordsForContractId[1].rentAmount).toEqual(savedRentPaymentDataRecord1.rentAmount);
+    expect(recordsForContractId[0].rentAmount).toEqual(savedRentPaymentDataRecord2.rentAmount);
+    expect(recordsForContractId).not.toContain(savedRentPaymentDataRecordOutOfRange);
+    expect(recordsForContractId[0].paymentDate < mockOutOfRangeDate).toBe(true);
+    expect(recordsForContractId[0].paymentDate > recordsForContractId[1].paymentDate).toBe(true);
   });
 });

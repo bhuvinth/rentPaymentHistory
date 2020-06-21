@@ -18,7 +18,7 @@ const mapModuleAlias = () => {
 
 module.exports = {
   mode: 'production',
-  entry: { handler: './src/infrastructure/handler.ts' },
+  entry: { main: './src/core/infrastructure/server.ts' },
   target: 'node',
   stats: 'errors-only',
   plugins: [new webpack.IgnorePlugin(/pg-native/, /\/pg\//)],

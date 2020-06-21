@@ -12,7 +12,7 @@ const moduleNameMapper = createEslintModuleMapsForLinting();
 
 module.exports = {
   extends: ['airbnb', 'airbnb-typescript/base', 'prettier'],
-  plugins: ['prettier', 'jest'],
+  plugins: ['import','prettier', 'jest'],
   rules: {
     'prettier/prettier': ['error'],
     '@typescript-eslint/camelcase': 'off',
@@ -31,11 +31,28 @@ module.exports = {
     ecmaVersion: 6,
   },
   settings: {
-    'import/resolver': {
-      alias: {
-        map: moduleNameMapper,
-        extensions: ['.ts', '.js', '.jsx', '.json'],
-      },
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
     },
+    "import/resolver": {
+      // use <root>/tsconfig.json
+      "typescript": {
+        "alwaysTryTypes": true // always try to resolve types under `<roo/>@types` directory even it doesn't contain any source code, like `@types/unist`
+      },
+      // use an array
+      "typescript": {
+        "directory": [
+          "./tsconfig.json",
+          "./test/tsconfig.json"
+        ]
+      },
+    }
+    // 'import/resolver': {
+    //   typescript: {},
+    //   // alias: {
+    //   //   map: moduleNameMapper,
+    //   //   extensions: ['.ts', '.js', '.jsx', '.json'],
+    //   // },
+    // },
   },
 };

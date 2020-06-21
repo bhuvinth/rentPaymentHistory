@@ -7,5 +7,11 @@ export default interface RentPaymentRepositoryInterface {
 
   deleteRentPayment(rentPaymentId: number): Promise<boolean>;
 
-  getAllRentPaymentsForContractId(contractId: number): Promise<RentPaymentHistoryDTO[]>;
+  getAllRentPaymentsForContractId(
+    contractId: number,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<RentPaymentHistoryDTO[]>;
+
+  getRentPaymentById(rentId: number): Promise<RentPaymentHistoryDTO | undefined>;
 }

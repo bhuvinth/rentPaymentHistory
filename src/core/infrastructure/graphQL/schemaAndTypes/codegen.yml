@@ -1,11 +1,11 @@
 overwrite: true
-schema: ./src/infrastructure/graphQL/schemaAndTypes/schema.ts
+schema: ./src/core/infrastructure/graphQL/schemaAndTypes/schema.ts
 generates:
-  ./src/infrastructure/graphQL/schemaAndTypes/schema.graphql:
+  ./src/core/infrastructure/graphQL/schemaAndTypes/schema.graphql:
     plugins:
       - add: "# This file is auto-generated from schema.ts."
       - schema-ast
-  ./src/infrastructure/graphQL/schemaAndTypes/rentPaymentGraphQlGeneratedTypes.ts:
+  ./src/core/infrastructure/graphQL/schemaAndTypes/rentPaymentGraphQlGeneratedTypes.ts:
     plugins:
       - add: "/* This file is auto-generated from schema.ts. */"
       - add: "/* eslint-disable */"

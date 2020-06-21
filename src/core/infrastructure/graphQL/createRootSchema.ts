@@ -3,7 +3,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 
 import rentPaymentResolvers from './rentPaymentResolvers';
 import scalarResolvers from './scalarResolvers';
-import createResolvers from './createResolvers';
+// import createResolvers from './createResolvers';
 import { rentPaymentSchema } from './schemaAndTypes/schema';
 
 /**
@@ -14,6 +14,7 @@ import { rentPaymentSchema } from './schemaAndTypes/schema';
 export default function createRootSchema(): GraphQLSchema {
   return makeExecutableSchema({
     typeDefs: [rentPaymentSchema],
-    resolvers: [rentPaymentResolvers, createResolvers(scalarResolvers)],
+    resolvers: [rentPaymentResolvers, scalarResolvers],
+    allowUndefinedInResolve: false,
   });
 }

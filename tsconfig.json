@@ -19,6 +19,15 @@
     "lib": ["dom", "es2018", "esnext.asynciterable"],
     "typeRoots": ["./node_modules/@types"],
     "paths": {
+      "@main/*": ["./*"],
+      "@config/*": ["config/*"],
+      "@core/*": ["core/*"],
+      "@graphql/*": ["core/infrastructure/graphQL/*"],
+      "@graphql-types/*": ["core/infrastructure/graphQL/schemaAndTypes"],
+      "@exceptions/*": ["exceptions/*"],
+      "@utils/*": ["utils/*"],
+      "@authenticationProviders/*": ["authenticationProviders/*"],
+      "@databaseConfiguration/*": ["database/*"]
     }
   },
   "exclude": ["node_modules", "**/*.test.ts", "**/*.spec.ts"],

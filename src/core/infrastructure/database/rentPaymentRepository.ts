@@ -1,4 +1,4 @@
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Repository, Between } from 'typeorm';
 import RentPaymentHistoryDTO from './rentPaymentHistoryDTO';
 import RentPaymentRepositoryInterface from './rentPaymentRepositoryInterface';
 
@@ -48,6 +48,9 @@ export default class RentPaymentRepository implements RentPaymentRepositoryInter
   public async deleteRentPayment(rentPaymentId: number): Promise<boolean> {
     try {
       const foundResult = await this.repository.findOneOrFail(rentPaymentId);
+      console.log(foundResult);
+      const findAllResult = await this.repository.find();
+      console.log(findAllResult);
       foundResult.isDeleted = true;
       await this.repository.update(rentPaymentId, foundResult);
       return true;
@@ -59,11 +62,24 @@ export default class RentPaymentRepository implements RentPaymentRepositoryInter
 
   public async getAllRentPaymentsForContractId(
     contractId: number,
+    startDate: Date,
+    endDate: Date,
   ): Promise<RentPaymentHistoryDTO[]> {
     try {
-      return await this.repository.find({ where: { contractId } });
+      return await this.repository.find({
+        where: {
+          contractId,
+          paymentDate: Between(startDate.toISOString(), endDate.toISOString()),
+          isDeleted: false,
+        },
+        order: { paymentDate: 'DESC' },
+      });
     } catch (error) {
       throw error;
     }
+  }
+
+  public async getRentPaymentById(rentId: number): Promise<RentPaymentHistoryDTO | undefined> {
+    return this.repository.findOne(rentId);
   }
 }
