@@ -33,7 +33,7 @@ module.exports = {
       "typescript": {
         "directory": [
           "./tsconfig.json",
-          "./test/tsconfig.json"
+          "./tsconfig.test.json"
         ]
       },
     }

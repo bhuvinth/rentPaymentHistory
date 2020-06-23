@@ -1,35 +1,30 @@
-import { Connection, createConnection } from 'typeorm';
 import {
   RentPaymentInput,
   RentPayment,
   RentPaymentUpdateInput,
 } from '../infrastructure/graphQL/schemaAndTypes';
-import RentPaymentHistoryDTO from '../infrastructure/database/rentPaymentHistoryDTO';
 import RentPaymentHistoryService from './rentPaymentHistoryService';
+import MockRepositoryImplementation from './mockRepository/mockRentPaymentRepository';
 
 describe('Test RentPaymentApplication Service', () => {
-  let connection: Connection = null;
   let rentPaymentApplicationService!: RentPaymentHistoryService;
-
+  let addMock!: any;
+  let updateMock!: any;
+  let deleteMock: any;
+  let getAllRentPaymentsForContractId: any;
+  let getRentPaymentById!: any;
   beforeEach(async () => {
-    if (!connection || !connection.isConnected) {
-      connection = await createConnection({
-        name: 'default',
-        type: 'sqlite',
-        database: ':memory:',
-        dropSchema: true,
-        entities: [RentPaymentHistoryDTO],
-        synchronize: true,
-        logging: false,
-      });
-      rentPaymentApplicationService = new RentPaymentHistoryService();
-      return connection;
-    }
-    return connection;
-  });
+    const mockRepositoryObj = new MockRepositoryImplementation();
+    addMock = jest.spyOn(mockRepositoryObj, 'addRentPayment');
+    updateMock = jest.spyOn(mockRepositoryObj, 'updateRentPayment');
+    deleteMock = jest.spyOn(mockRepositoryObj, 'deleteRentPayment');
+    getAllRentPaymentsForContractId = jest.spyOn(
+      mockRepositoryObj,
+      'getAllRentPaymentsForContractId',
+    );
+    getRentPaymentById = jest.spyOn(mockRepositoryObj, 'getRentPaymentById');
 
-  afterEach(async () => {
-    return connection.close();
+    rentPaymentApplicationService = new RentPaymentHistoryService(mockRepositoryObj);
   });
 
   async function addInitialRentPaymentAndTest(
@@ -62,6 +57,7 @@ describe('Test RentPaymentApplication Service', () => {
 
   test('Should addRentPayment with Mock database', async () => {
     await addInitialRentPaymentAndTest();
+    expect(addMock).toHaveBeenCalledTimes(1);
   });
 
   test('Should updateRentPayment with Mock database with valid Id', async () => {
@@ -76,6 +72,10 @@ describe('Test RentPaymentApplication Service', () => {
       updateRentPaymentInput,
     );
 
+    expect(addMock).toHaveBeenCalledTimes(1);
+    expect(updateMock).toHaveBeenCalledTimes(1);
+    expect(getRentPaymentById).toHaveBeenCalledTimes(1);
+
     expect(rentPayment).toBeDefined();
     expect(rentPayment.contractId).toEqual(initialRentPayment.contractId);
     expect(rentPayment.createdAt).toEqual(initialRentPayment.createdAt);
@@ -83,13 +83,7 @@ describe('Test RentPaymentApplication Service', () => {
     expect(rentPayment.rentId).toEqual(updateRentPaymentInput.rentId);
     expect(rentPayment.isImported).toEqual(updateRentPaymentInput.isImported);
     expect(rentPayment.value).toEqual(updateRentPaymentInput.value);
-
-    /* TODO: Currently Typeorm sqlite has an issue with improper precision with 'CURRENT_TIMESTAMP' being used.
-             https://github.com/typeorm/typeorm/issues/2718
-             Enable this test after fixing it. 
-        NEEDSHELP
-     */
-    // expect(rentPayment.createdAt < rentPayment.updatedAt).toBeTruthy();
+    expect(rentPayment.createdAt < rentPayment.updatedAt).toBeTruthy();
   });
 
   test('Should not updateRentPayment with Mock database with invalid Id', async () => {
@@ -105,46 +99,35 @@ describe('Test RentPaymentApplication Service', () => {
     );
 
     expect(rentPaymentPromise).rejects.toThrow();
+
+    expect(getRentPaymentById).toHaveBeenCalledTimes(1);
+    expect(updateMock).toHaveBeenCalledTimes(0);
   });
 
   test('Should get Rent Payment History by contractId, startDate, endDate', async () => {
     const mockContractId = 100;
-    const fromRentPayment = await addInitialRentPaymentAndTest(
+    await addInitialRentPaymentAndTest(
       mockContractId,
       -1000,
       new Date('2020-01-02'),
       'Please Pay rent',
     );
-    const toRentPayment = await addInitialRentPaymentAndTest(
-      mockContractId,
-      1000,
-      new Date('2020-01-30'),
-      'Rent Paid',
-    );
-
+    await addInitialRentPaymentAndTest(mockContractId, 1000, new Date('2020-01-30'), 'Rent Paid');
     const mockOutOfRangeDate = new Date('2020-03-01');
-    const outsideOfDateRangePayment = await addInitialRentPaymentAndTest(
-      mockContractId,
-      -1000,
-      mockOutOfRangeDate,
-      'Pay Rent',
-    );
+    await addInitialRentPaymentAndTest(mockContractId, -1000, mockOutOfRangeDate, 'Pay Rent');
+
     const totalRentPayments = await rentPaymentApplicationService.getRentPaymentHistory(
       mockContractId,
       new Date('2020-01-01'),
       new Date('2020-02-01'),
     );
 
+    expect(getAllRentPaymentsForContractId).toHaveBeenCalledTimes(1);
+    expect(addMock).toHaveBeenCalledTimes(3);
+
     expect(totalRentPayments).toBeTruthy();
     expect(totalRentPayments.sum).toBe(0);
     expect(totalRentPayments.items.length).toEqual(2);
-    expect(totalRentPayments.items[1].contractId).toEqual(fromRentPayment.contractId);
-    expect(totalRentPayments.items[0].contractId).toEqual(toRentPayment.contractId);
-    expect(totalRentPayments.items[1].value).toEqual(fromRentPayment.value);
-    expect(totalRentPayments.items[0].value).toEqual(toRentPayment.value);
-    expect(totalRentPayments).not.toContain(outsideOfDateRangePayment);
-    expect(totalRentPayments.items[0].time < mockOutOfRangeDate).toBe(true);
-    expect(totalRentPayments.items[0].time > totalRentPayments.items[1].time).toBe(true);
   });
 
   test('Should delete data with Mock database with valid Id', async () => {
@@ -167,11 +150,15 @@ describe('Test RentPaymentApplication Service', () => {
     );
 
     expect(deleteRentPaymentResponse).toBe(true);
+    expect(addMock).toHaveBeenCalledTimes(2);
+    expect(deleteMock).toHaveBeenCalledTimes(1);
     const getRentPayments = await rentPaymentApplicationService.getRentPaymentHistory(
       mockContractId,
       new Date('2020-01-01'),
       new Date('2020-03-01'),
     );
+
+    expect(deleteMock);
     expect(getRentPayments).toBeTruthy();
     expect(getRentPayments.items.length).toBe(1);
     expect(getRentPayments.items[0]).toEqual(secondRentPaymentRegcord);
@@ -181,5 +168,6 @@ describe('Test RentPaymentApplication Service', () => {
     const rentPaymentPromise = rentPaymentApplicationService.deleteRentPayment(Number.MAX_VALUE);
 
     expect(rentPaymentPromise).rejects.toThrow();
+    expect(deleteMock).toHaveBeenCalledTimes(1);
   });
 });

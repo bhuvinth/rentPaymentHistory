@@ -1,0 +1,281 @@
+{
+	"info": {
+		"_postman_id": "1ec4d397-9bcb-4bc7-9659-1fe1b1541912",
+		"name": "Tenant Payment History",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get List of Payment History for Tenant Contract Id",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"accept-encoding": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "DNT",
+						"value": "1",
+						"disabled": true
+					},
+					{
+						"key": "Origin",
+						"value": "http://localhost:4000"
+					},
+					{
+						"key": "authorization",
+						"value": "8xjM8PF9XC7KVUQ"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "# Write your query or mutation here\nquery getListOfPayments($contractId:Int! , $startDate:Date!, $endDate:Date!){\n  getListOfPayments(contractId: $contractId, startDate: $startDate, endDate:$endDate)\n  {\n    sum\n\t\titems{\n      rentId\n\t\t\tcontractId\n      description\n      value\n      time\n      isImported\n      createdAt\n      updatedAt\n    }\n  }\n}\n\n",
+						"variables": "{\n  \"contractId\": 2, \n  \"startDate\": \"2020-01-01T01:35:18.291Z\",\n  \"endDate\":\"2020-06-21T01:35:18.291Z\"\n}\n"
+					},
+					"options": {
+						"graphql": {}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						""
+					]
+				},
+				"description": "This is for getting the rent payment history for a Tenant's ContractID"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Rent Payment Record for Tenant ContractId",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "DNT",
+						"value": "1"
+					},
+					{
+						"key": "Origin",
+						"value": "http://localhost:4000"
+					},
+					{
+						"key": "authorization",
+						"value": "8xjM8PF9XC7KVUQ"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation addRentPayment($rentPaymentInput: RentPaymentInput!) {\n  createRentPayment(rentPaymentInput: $rentPaymentInput)\n  {\n    rentId\n\t\tcontractId\n    description\n    value\n    time\n    createdAt\n    updatedAt\n  }\n}\n\n",
+						"variables": "{\n  \"rentPaymentInput\":{\n    \"contractId\": 17689,\n\t\"description\":\"Rent paid\",\n    \"value\": 100,\n    \"isImported\": false, \n    \"time\": \"2016-12-09T00:00:00.00Z\"\n  }\n}"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Rent Payment",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true,
+					"accept": true,
+					"accept-encoding": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "DNT",
+						"value": "1"
+					},
+					{
+						"key": "Origin",
+						"value": "http://localhost:4000"
+					},
+					{
+						"key": "authorization",
+						"value": "8xjM8PF9XC7KVUQ"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation updateRentPayment ($updateRentPaymentInput:RentPaymentUpdateInput! ){\n  updateRentPayment(updateRentPaymentInput: $updateRentPaymentInput)\n  {\n    rentId\n    contractId\n    description\n    value\n    updatedAt\n    time\n  }\n}",
+						"variables": "{\n  \"updateRentPaymentInput\":{\n   \"description\": \"rent has been paid\",\n   \"value\": -5001,\n    \"isImported\": true,\n\t\"rentId\": 6\n  }\n}"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Rent Payment",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true,
+					"accept": true,
+					"accept-encoding": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "DNT",
+						"value": "1"
+					},
+					{
+						"key": "Origin",
+						"value": "http://localhost:4000"
+					},
+					{
+						"key": "authorization",
+						"value": "8xjM8PF9XC7KVUQ"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation deleteRentPayment($rentPaymentId:Int!) {\n  deleteRentPayment(rentPaymentId: $rentPaymentId)\n}",
+						"variables": "{\n  \"rentPaymentId\": 6000\n}"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						""
+					]
+				},
+				"description": "This is to delete an existing Rent Id"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "cb903134-39ed-4159-8f60-137216277df5",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "4634afeb-ff61-4f6e-846f-ee393c8f7da4",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

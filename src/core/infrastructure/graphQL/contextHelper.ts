@@ -33,7 +33,6 @@ export default async function createApolloContextProvider(
   let token;
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     await databaseConnectionManager.getConnection();
 
     token = event.headers.authorization || event.headers.Authorization;

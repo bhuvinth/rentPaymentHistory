@@ -1,37 +1,39 @@
 import { RentPayment } from '@core/infrastructure/graphQL/schemaAndTypes';
 import RentPaymentHistory from '@core/domain/rentPaymentHistory';
-import RentPaymentHistoryDTO from '@core/infrastructure/database/rentPaymentHistoryDTO';
+import RentPaymentHistoryEntity from '@main/core/infrastructure/database/rentPaymentHistoryEntity';
 import ContractId from '@core/domain/valueObjects/contractId';
 import RentAmount from '@core/domain/valueObjects/rentAmount';
 
 export default class RentPaymentHistoryMapper {
-  public static fromDomainToDTO(rentPaymentDomainObj: RentPaymentHistory): RentPaymentHistoryDTO {
-    const rentPaymentHistoryDtoObj = new RentPaymentHistoryDTO();
-    rentPaymentHistoryDtoObj.contractId = rentPaymentDomainObj.contractId.value;
-    rentPaymentHistoryDtoObj.description = rentPaymentDomainObj.description;
-    rentPaymentHistoryDtoObj.isImported = rentPaymentDomainObj.isImported;
-    rentPaymentHistoryDtoObj.isDeleted = rentPaymentDomainObj.isDeleted;
-    rentPaymentHistoryDtoObj.paymentDate = rentPaymentDomainObj.paymentDate;
-    rentPaymentHistoryDtoObj.rentAmount = rentPaymentDomainObj.rentAmount.value;
-    rentPaymentHistoryDtoObj.isImported = rentPaymentDomainObj.isImported;
-    rentPaymentHistoryDtoObj.created = rentPaymentDomainObj.createdDate;
-    rentPaymentHistoryDtoObj.id = rentPaymentDomainObj.id;
-    rentPaymentHistoryDtoObj.updated = rentPaymentDomainObj.updatedDate;
+  public static fromDomainToEntity(
+    rentPaymentDomainObj: RentPaymentHistory,
+  ): RentPaymentHistoryEntity {
+    const rentPaymentHistoryEntityObj = new RentPaymentHistoryEntity();
+    rentPaymentHistoryEntityObj.contractId = rentPaymentDomainObj.contractId.value;
+    rentPaymentHistoryEntityObj.description = rentPaymentDomainObj.description;
+    rentPaymentHistoryEntityObj.isImported = rentPaymentDomainObj.isImported;
+    rentPaymentHistoryEntityObj.isDeleted = rentPaymentDomainObj.isDeleted;
+    rentPaymentHistoryEntityObj.paymentDate = rentPaymentDomainObj.paymentDate;
+    rentPaymentHistoryEntityObj.rentAmount = rentPaymentDomainObj.rentAmount.value;
+    rentPaymentHistoryEntityObj.isImported = rentPaymentDomainObj.isImported;
+    rentPaymentHistoryEntityObj.createdAt = rentPaymentDomainObj.createdDate;
+    rentPaymentHistoryEntityObj.id = rentPaymentDomainObj.id;
+    rentPaymentHistoryEntityObj.updatedAt = rentPaymentDomainObj.updatedDate;
 
-    return rentPaymentHistoryDtoObj;
+    return rentPaymentHistoryEntityObj;
   }
 
-  public static fromDtoToDomain(rentPaymentDTObj: RentPaymentHistoryDTO): RentPaymentHistory {
+  public static fromEntityToDomain(rentPaymentDTObj: RentPaymentHistoryEntity): RentPaymentHistory {
     const rentPaymentHistoryObj: RentPaymentHistory = {
       contractId: ContractId.create(rentPaymentDTObj.contractId),
-      createdDate: rentPaymentDTObj.created,
+      createdDate: rentPaymentDTObj.createdAt,
       description: rentPaymentDTObj.description,
       id: rentPaymentDTObj.id,
       isDeleted: rentPaymentDTObj.isDeleted,
       isImported: rentPaymentDTObj.isImported,
       paymentDate: rentPaymentDTObj.paymentDate,
       rentAmount: RentAmount.create(rentPaymentDTObj.rentAmount),
-      updatedDate: rentPaymentDTObj.updated,
+      updatedDate: rentPaymentDTObj.updatedAt,
     };
     return rentPaymentHistoryObj;
   }
@@ -46,6 +48,7 @@ export default class RentPaymentHistoryMapper {
       time: rentPaymentDomainObj.paymentDate,
       updatedAt: rentPaymentDomainObj.updatedDate,
       value: rentPaymentDomainObj.rentAmount.value,
+      isDeleted: rentPaymentDomainObj.isDeleted,
     };
     return rentPaymentGraphQLObj;
   }

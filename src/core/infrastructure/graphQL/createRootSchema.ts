@@ -3,7 +3,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 
 import rentPaymentResolvers from './resolvers/rentPaymentResolvers';
 import scalarResolvers from './resolvers/scalarResolvers';
-import { rentPaymentSchema } from './schemaAndTypes/schema';
+import rentPaymentSchema from './schemaAndTypes/schema';
 
 /**
  * @returns GraphQL schema including resolvers.

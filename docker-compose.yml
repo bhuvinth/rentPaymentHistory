@@ -1,18 +1,31 @@
 version: '2.3'
 services:
   postgres:
+    container_name: postgres
     image: postgres
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres']
-      interval: 5s
-      timeout: 20s
     volumes:
       - pg-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+  graphql-api:
+    build: .
+    depends_on: 
+     - "postgres"
+    ports:
+      - 4000:4000
+    environment:
+      DATABASE_HOST_NAME: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USER_NAME: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_SCHEMA_NAME: postgres
+      AUTH_TOKEN: 8xjM8PF9XC7KVUQ
+      PORT: 4000
+
+
 volumes:
   pg-data:

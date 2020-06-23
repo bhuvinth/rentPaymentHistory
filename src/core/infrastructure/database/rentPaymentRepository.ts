@@ -3,19 +3,19 @@ import Logger from '@main/utils/logger';
 import RentPaymentSaveError from '@core/infrastructure/errors/rentPaymentSaveError';
 import UnableToFetchRentPayments from '@core/infrastructure/errors/unableToFetchRentPaymentError';
 import UnableToDeleteRentPayments from '@core/infrastructure/errors/unableToDeleteRentPayment';
-import RentPaymentHistoryDTO from './rentPaymentHistoryDTO';
+import RentPaymentHistoryEntity from './rentPaymentHistoryEntity';
 import RentPaymentRepositoryInterface from './rentPaymentRepositoryInterface';
 
 export default class RentPaymentRepository implements RentPaymentRepositoryInterface {
-  private repository: Repository<RentPaymentHistoryDTO>;
+  private repository: Repository<RentPaymentHistoryEntity>;
 
   constructor() {
-    this.repository = getRepository(RentPaymentHistoryDTO);
+    this.repository = getRepository(RentPaymentHistoryEntity);
   }
 
   public async addRentPayment(
-    rentPaymentDataObj: RentPaymentHistoryDTO,
-  ): Promise<RentPaymentHistoryDTO> {
+    rentPaymentDataObj: RentPaymentHistoryEntity,
+  ): Promise<RentPaymentHistoryEntity> {
     try {
       const savedRentPayment = await this.repository.save(rentPaymentDataObj);
       return savedRentPayment;
@@ -26,23 +26,19 @@ export default class RentPaymentRepository implements RentPaymentRepositoryInter
   }
 
   public async updateRentPayment(
-    rentPaymentDataObj: RentPaymentHistoryDTO,
-  ): Promise<RentPaymentHistoryDTO> {
+    rentPaymentDataObj: RentPaymentHistoryEntity,
+  ): Promise<RentPaymentHistoryEntity> {
     try {
-      await this.repository
-        .createQueryBuilder()
-        .update()
-        .set({
-          description: rentPaymentDataObj.description,
-          paymentDate: rentPaymentDataObj.paymentDate,
-          rentAmount: rentPaymentDataObj.rentAmount,
-          isImported: rentPaymentDataObj.isImported,
-        })
-        .where('id = :id', { id: rentPaymentDataObj.id })
-        .execute();
-
-      const updatedData = await this.repository.findOneOrFail(rentPaymentDataObj.id);
-      return updatedData;
+      const findData = await this.repository.findOneOrFail({
+        id: rentPaymentDataObj.id,
+        isDeleted: false,
+      });
+      findData.description = rentPaymentDataObj.description;
+      findData.paymentDate = rentPaymentDataObj.paymentDate;
+      findData.rentAmount = rentPaymentDataObj.rentAmount;
+      findData.isImported = rentPaymentDataObj.isImported;
+      const savedData = await this.repository.save(findData);
+      return savedData;
     } catch (error) {
       Logger.error(error);
       throw new RentPaymentSaveError(error);
@@ -52,9 +48,6 @@ export default class RentPaymentRepository implements RentPaymentRepositoryInter
   public async deleteRentPayment(rentPaymentId: number): Promise<boolean> {
     try {
       const foundResult = await this.repository.findOneOrFail(rentPaymentId);
-      console.log(foundResult);
-      const findAllResult = await this.repository.find();
-      console.log(findAllResult);
       foundResult.isDeleted = true;
       await this.repository.update(rentPaymentId, foundResult);
       return true;
@@ -68,7 +61,7 @@ export default class RentPaymentRepository implements RentPaymentRepositoryInter
     contractId: number,
     startDate: Date,
     endDate: Date,
-  ): Promise<RentPaymentHistoryDTO[]> {
+  ): Promise<RentPaymentHistoryEntity[]> {
     try {
       return await this.repository.find({
         where: {
@@ -84,7 +77,7 @@ export default class RentPaymentRepository implements RentPaymentRepositoryInter
     }
   }
 
-  public async getRentPaymentById(rentId: number): Promise<RentPaymentHistoryDTO | undefined> {
+  public async getRentPaymentById(rentId: number): Promise<RentPaymentHistoryEntity | undefined> {
     return this.repository.findOne(rentId);
   }
 }

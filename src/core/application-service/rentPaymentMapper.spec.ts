@@ -1,7 +1,7 @@
 import RentPaymentHistory from '../domain/rentPaymentHistory';
 import RentPaymentHistoryMapper from './rentPaymentMapper';
 import { RentPaymentInput } from '../infrastructure/graphQL/schemaAndTypes';
-import RentPaymentHistoryDTO from '../infrastructure/database/rentPaymentHistoryDTO';
+import RentPaymentHistoryEntity from '../infrastructure/database/rentPaymentHistoryEntity';
 
 describe('Testing RentPaymentHistoryMapper methods', () => {
   test('test Domain to DTO map', () => {
@@ -16,59 +16,64 @@ describe('Testing RentPaymentHistoryMapper methods', () => {
       mockRentPaymentInput,
     );
 
-    const rentPaymentDtoObj = RentPaymentHistoryMapper.fromDomainToDTO(rentPaymentDomainObj);
-    expect(rentPaymentDtoObj).toBeTruthy();
-    expect(rentPaymentDtoObj.contractId).toEqual(rentPaymentDomainObj.contractId.value);
-    expect(rentPaymentDtoObj.description).toEqual(rentPaymentDomainObj.description);
-    expect(rentPaymentDomainObj.isImported).toEqual(rentPaymentDomainObj.isImported);
-    expect(rentPaymentDtoObj.rentAmount).toEqual(rentPaymentDomainObj.rentAmount.value);
-    expect(rentPaymentDtoObj.paymentDate).toEqual(rentPaymentDomainObj.paymentDate);
-    expect(rentPaymentDtoObj.isDeleted).toEqual(rentPaymentDomainObj.isDeleted);
+    const rentPaymentEntityObj = RentPaymentHistoryMapper.fromDomainToEntity(rentPaymentDomainObj);
+    expect(rentPaymentEntityObj).toBeTruthy();
+    expect(rentPaymentEntityObj.contractId).toEqual(rentPaymentDomainObj.contractId.value);
+    expect(rentPaymentEntityObj.description).toEqual(rentPaymentDomainObj.description);
+    expect(rentPaymentEntityObj.isImported).toEqual(rentPaymentDomainObj.isImported);
+    expect(rentPaymentEntityObj.rentAmount).toEqual(rentPaymentDomainObj.rentAmount.value);
+    expect(rentPaymentEntityObj.paymentDate).toEqual(rentPaymentDomainObj.paymentDate);
+    expect(rentPaymentEntityObj.isDeleted).toEqual(rentPaymentDomainObj.isDeleted);
   });
 
   test('test DTO to Domain map', () => {
-    const mockRentPaymentDtoInput: RentPaymentHistoryDTO = {
+    const mockRentPaymentDtoInput: RentPaymentHistoryEntity = {
       contractId: 1,
       isImported: true,
-      created: new Date(),
+      createdAt: new Date(),
       id: 1,
       isDeleted: false,
       paymentDate: new Date(),
       rentAmount: 1000,
-      updated: new Date(),
+      updatedAt: new Date(),
       description: 'rent paid',
     };
 
-    const rentPaymentDomainObj = RentPaymentHistoryMapper.fromDtoToDomain(mockRentPaymentDtoInput);
+    const rentPaymentDomainObj = RentPaymentHistoryMapper.fromEntityToDomain(
+      mockRentPaymentDtoInput,
+    );
     expect(rentPaymentDomainObj).toBeTruthy();
     expect(rentPaymentDomainObj.contractId.value).toEqual(mockRentPaymentDtoInput.contractId);
-    expect(rentPaymentDomainObj.createdDate).toEqual(mockRentPaymentDtoInput.created);
+    expect(rentPaymentDomainObj.createdDate).toEqual(mockRentPaymentDtoInput.createdAt);
     expect(rentPaymentDomainObj.description).toEqual(mockRentPaymentDtoInput.description);
     expect(rentPaymentDomainObj.id).toEqual(mockRentPaymentDtoInput.id);
     expect(rentPaymentDomainObj.isImported).toEqual(mockRentPaymentDtoInput.isImported);
     expect(rentPaymentDomainObj.isDeleted).toEqual(mockRentPaymentDtoInput.isDeleted);
     expect(rentPaymentDomainObj.paymentDate).toEqual(mockRentPaymentDtoInput.paymentDate);
     expect(rentPaymentDomainObj.rentAmount.value).toEqual(mockRentPaymentDtoInput.rentAmount);
-    expect(rentPaymentDomainObj.updatedDate).toEqual(mockRentPaymentDtoInput.updated);
+    expect(rentPaymentDomainObj.updatedDate).toEqual(mockRentPaymentDtoInput.updatedAt);
   });
 
   test('Test Domain to GraphQL', () => {
-    const mockRentPaymentDtoInput: RentPaymentHistoryDTO = {
+    const mockRentPaymentDtoInput: RentPaymentHistoryEntity = {
       contractId: 1,
       isImported: true,
-      created: new Date(),
+      createdAt: new Date(),
       id: 1,
       isDeleted: false,
       paymentDate: new Date(),
       rentAmount: 1000,
-      updated: new Date(),
+      updatedAt: new Date(),
       description: 'rent paid',
     };
 
-    const rentPaymentDomainObj = RentPaymentHistoryMapper.fromDtoToDomain(mockRentPaymentDtoInput);
+    const rentPaymentDomainObj = RentPaymentHistoryMapper.fromEntityToDomain(
+      mockRentPaymentDtoInput,
+    );
     const rentPaymentGraphQlOutput = RentPaymentHistoryMapper.fromDomainToGraphQL(
       rentPaymentDomainObj,
     );
+
     expect(rentPaymentGraphQlOutput.contractId).toEqual(rentPaymentDomainObj.contractId.value);
     expect(rentPaymentGraphQlOutput.createdAt).toEqual(rentPaymentDomainObj.createdDate);
     expect(rentPaymentGraphQlOutput.description).toEqual(rentPaymentDomainObj.description);

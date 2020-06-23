@@ -44,16 +44,18 @@ export type MutationDeleteRentPaymentArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  getTotalRentPayment?: Maybe<TotalRentPayment>;
+  /** This is to get the rent payment history for a tenant based on contractId, between a range of dates. */
+  getListOfPayments?: Maybe<TotalRentPayment>;
 };
 
 
-export type QueryGetTotalRentPaymentArgs = {
+export type QueryGetListOfPaymentsArgs = {
   contractId: Scalars['Int'];
   startDate: Scalars['Date'];
   endDate: Scalars['Date'];
 };
 
+/** This is to fetch data for Rent Payment */
 export type RentPayment = {
   __typename?: 'RentPayment';
   rentId: Scalars['Int'];
@@ -64,6 +66,7 @@ export type RentPayment = {
   isImported: Scalars['Boolean'];
   createdAt: Scalars['Date'];
   updatedAt: Scalars['Date'];
+  isDeleted: Scalars['Boolean'];
 };
 
 export type RentPaymentInput = {
@@ -85,7 +88,7 @@ export type RentPaymentUpdateInput = {
 export type TotalRentPayment = {
   __typename?: 'totalRentPayment';
   sum: Scalars['Int'];
-  items?: Maybe<Array<Maybe<RentPayment>>>;
+  items: Array<Maybe<RentPayment>>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -210,7 +213,7 @@ export interface OptionalScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 }
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  getTotalRentPayment?: Resolver<Maybe<ResolversTypes['totalRentPayment']>, ParentType, ContextType, RequireFields<QueryGetTotalRentPaymentArgs, 'contractId' | 'startDate' | 'endDate'>>;
+  getListOfPayments?: Resolver<Maybe<ResolversTypes['totalRentPayment']>, ParentType, ContextType, RequireFields<QueryGetListOfPaymentsArgs, 'contractId' | 'startDate' | 'endDate'>>;
 }>;
 
 export type RentPaymentResolvers<ContextType = any, ParentType extends ResolversParentTypes['RentPayment'] = ResolversParentTypes['RentPayment']> = ResolversObject<{
@@ -222,12 +225,13 @@ export type RentPaymentResolvers<ContextType = any, ParentType extends Resolvers
   isImported?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  isDeleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 
 export type TotalRentPaymentResolvers<ContextType = any, ParentType extends ResolversParentTypes['totalRentPayment'] = ResolversParentTypes['totalRentPayment']> = ResolversObject<{
   sum?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  items?: Resolver<Maybe<Array<Maybe<ResolversTypes['RentPayment']>>>, ParentType, ContextType>;
+  items?: Resolver<Array<Maybe<ResolversTypes['RentPayment']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 

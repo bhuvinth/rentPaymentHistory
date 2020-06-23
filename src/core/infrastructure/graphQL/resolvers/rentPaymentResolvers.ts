@@ -3,7 +3,7 @@ import {
   Resolvers,
   RentPaymentInput,
   RentPaymentUpdateInput,
-  QueryGetTotalRentPaymentArgs,
+  QueryGetListOfPaymentsArgs,
 } from '@core/infrastructure/graphQL/schemaAndTypes';
 import RentPaymentHistoryService from '@core/application-service/rentPaymentHistoryService';
 import {
@@ -13,9 +13,9 @@ import {
 
 const resolvers: Resolvers<ServiceResolverContext> = {
   Query: {
-    getTotalRentPayment: async (
+    getListOfPayments: async (
       source,
-      { contractId, startDate, endDate }: QueryGetTotalRentPaymentArgs,
+      { contractId, startDate, endDate }: QueryGetListOfPaymentsArgs,
       ctx: ServiceResolverContext,
     ) => {
       validateContext(ctx);
@@ -24,7 +24,6 @@ const resolvers: Resolvers<ServiceResolverContext> = {
         startDate,
         endDate,
       );
-      console.log(data);
       return data;
     },
   },
@@ -35,7 +34,6 @@ const resolvers: Resolvers<ServiceResolverContext> = {
       ctx: ServiceResolverContext,
     ) => {
       validateContext(ctx);
-      console.log(rentPaymentInput);
       return new RentPaymentHistoryService().addPaymentRecord(rentPaymentInput);
     },
     deleteRentPayment: async (source, { rentPaymentId }, ctx: ServiceResolverContext) => {

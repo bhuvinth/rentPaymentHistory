@@ -1,9 +1,11 @@
-import RentPaymentHistoryDTO from './rentPaymentHistoryDTO';
+import RentPaymentHistoryEntity from './rentPaymentHistoryEntity';
 
 export default interface RentPaymentRepositoryInterface {
-  addRentPayment(rentPaymentDataObj: RentPaymentHistoryDTO): Promise<RentPaymentHistoryDTO>;
+  addRentPayment(rentPaymentDataObj: RentPaymentHistoryEntity): Promise<RentPaymentHistoryEntity>;
 
-  updateRentPayment(rentPaymentDataObj: RentPaymentHistoryDTO): Promise<RentPaymentHistoryDTO>;
+  updateRentPayment(
+    rentPaymentDataObj: RentPaymentHistoryEntity,
+  ): Promise<RentPaymentHistoryEntity>;
 
   deleteRentPayment(rentPaymentId: number): Promise<boolean>;
 
@@ -11,7 +13,7 @@ export default interface RentPaymentRepositoryInterface {
     contractId: number,
     startDate: Date,
     endDate: Date,
-  ): Promise<RentPaymentHistoryDTO[]>;
+  ): Promise<RentPaymentHistoryEntity[]>;
 
-  getRentPaymentById(rentId: number): Promise<RentPaymentHistoryDTO | undefined>;
+  getRentPaymentById(rentId: number): Promise<RentPaymentHistoryEntity | undefined>;
 }

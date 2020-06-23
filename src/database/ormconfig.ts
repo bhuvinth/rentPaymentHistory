@@ -1,8 +1,7 @@
 import { ConnectionOptions } from 'typeorm';
 
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import RentPaymentHistoryDTO from '../core/infrastructure/database/rentPaymentHistoryDTO';
-import * as migrations from './migrations/1592700426993-createRentPaymentHistoryTable';
+import RentPaymentHistoryEntity from '../core/infrastructure/database/rentPaymentHistoryEntity';
 import appConfig from '../config/appConfig';
 
 export default (): ConnectionOptions => {
@@ -16,8 +15,7 @@ export default (): ConnectionOptions => {
     database: appConfig.databaseConfiguration.schemaName,
     synchronize: true,
     logging: false,
-    entities: [RentPaymentHistoryDTO],
-    migrations: Object.values(migrations),
+    entities: [RentPaymentHistoryEntity],
     cli: {
       migrationsDir: './src/database/migrations',
     },

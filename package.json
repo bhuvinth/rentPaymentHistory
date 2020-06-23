@@ -8,8 +8,12 @@
     "clean": "rimraf ./dist",
     "prebuild": "npm run clean",
     "build": "webpack --config ./webpack.config.js --mode production",
-    "test": "jest --passWithNoTests",
-    "dev": "ts-node -r tsconfig-paths/register ./src/core/infrastructure/server.ts ",
+    "test": "jest --passWithNoTests  --silent",
+    "test:coverage": "jest --passWithNoTests --coverage=true --silent",
+    "predev": "npm run build && docker-compose build --no-cache",
+    "dev": "docker-compose up",
+    "prestart": "npm run build && docker-compose build --no-cache",
+    "start": "docker-compose up -d",
     "lint": "eslint --max-warnings 0 --ext .js,.jsx,.ts,.tsx ./"
   },
   "repository": {
@@ -23,7 +27,6 @@
   },
   "homepage": "https://github.com/bhuvinth/rentPaymentHistory#readme",
   "dependencies": {
-    "@types/dotenv-safe": "^8.1.0",
     "apollo-server": "^2.15.0",
     "dotenv-safe": "^8.2.0",
     "graphql": "^14.4.2",
@@ -36,6 +39,7 @@
     "typeorm-naming-strategies": "^1.1.0"
   },
   "devDependencies": {
+    "@types/dotenv-safe": "^8.1.0",
     "@graphql-codegen/add": "^1.5.0",
     "@graphql-codegen/cli": "^1.5.0",
     "@graphql-codegen/introspection": "^1.5.0",

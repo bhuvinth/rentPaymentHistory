@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-constructor */
-import RentPaymentHistoryDTO from '../infrastructure/database/rentPaymentHistoryDTO';
+import { IApplicationError } from '@main/common/applicationError';
+import RentPaymentHistoryEntity from '../infrastructure/database/rentPaymentHistoryEntity';
 import {
   RentPaymentInput,
   RentPaymentUpdateInput,
@@ -10,6 +11,7 @@ import RentPaymentRepositoryInterface from '../infrastructure/database/rentPayme
 import RentPaymentHistory from '../domain/rentPaymentHistory';
 import RentPaymentHistoryMapper from './rentPaymentMapper';
 import RentPaymentRepository from '../infrastructure/database/rentPaymentRepository';
+import DomainError from '../domain/domainErrors/domainErrorBase';
 
 export default class RentPaymentHistoryService {
   public constructor(
@@ -20,12 +22,12 @@ export default class RentPaymentHistoryService {
     const rentAmountDomainObj = RentPaymentHistory.createRentPaymentFromGraphQlInput(
       rentPaymentInputObj,
     );
-    const rentAmountDTO = RentPaymentHistoryMapper.fromDomainToDTO(rentAmountDomainObj);
+    const rentAmountEntity = RentPaymentHistoryMapper.fromDomainToEntity(rentAmountDomainObj);
 
-    const rentPaymentCreatedObj = await this.rentPaymentRepository.addRentPayment(rentAmountDTO);
+    const rentPaymentCreatedObj = await this.rentPaymentRepository.addRentPayment(rentAmountEntity);
 
     return RentPaymentHistoryMapper.fromDomainToGraphQL(
-      RentPaymentHistoryMapper.fromDtoToDomain(rentPaymentCreatedObj),
+      RentPaymentHistoryMapper.fromEntityToDomain(rentPaymentCreatedObj),
     );
   }
 
@@ -35,10 +37,15 @@ export default class RentPaymentHistoryService {
     const existingRentPayment = await this.rentPaymentRepository.getRentPaymentById(
       rentPaymenGraphQlInput.rentId,
     );
+
     if (!existingRentPayment) {
-      throw new Error('Invalid Rent Id');
+      const applicationErrorObj: IApplicationError = {
+        code: 'INVALID_RENT_ID',
+        message: 'Invalid Rent Id passed. Cannot update',
+      };
+      throw new DomainError(applicationErrorObj);
     }
-    const existingRentPaymentDomainObj = RentPaymentHistoryMapper.fromDtoToDomain(
+    const existingRentPaymentDomainObj = RentPaymentHistoryMapper.fromEntityToDomain(
       existingRentPayment,
     );
 
@@ -46,11 +53,13 @@ export default class RentPaymentHistoryService {
       existingRentPaymentDomainObj,
       rentPaymenGraphQlInput,
     );
-    const rentAmountDTO = RentPaymentHistoryMapper.fromDomainToDTO(rentAmountDomainObj);
+    const rentAmountEntity = RentPaymentHistoryMapper.fromDomainToEntity(rentAmountDomainObj);
 
-    const rentPaymentUpdatedObj = await this.rentPaymentRepository.updateRentPayment(rentAmountDTO);
+    const rentPaymentUpdatedObj = await this.rentPaymentRepository.updateRentPayment(
+      rentAmountEntity,
+    );
     return RentPaymentHistoryMapper.fromDomainToGraphQL(
-      RentPaymentHistoryMapper.fromDtoToDomain(rentPaymentUpdatedObj),
+      RentPaymentHistoryMapper.fromEntityToDomain(rentPaymentUpdatedObj),
     );
   }
 
@@ -69,41 +78,24 @@ export default class RentPaymentHistoryService {
 
   // eslint-disable-next-line class-methods-use-this
   private processRentPaymentArray(
-    rentPaymentsBetweenDate: RentPaymentHistoryDTO[],
+    rentPaymentsBetweenDate: RentPaymentHistoryEntity[],
   ): TotalRentPayment {
     const totalRentPaymentObj: TotalRentPayment = {
       sum: 0,
       items: [],
     };
 
-    // eslint-disable-next-line array-callback-return
-    rentPaymentsBetweenDate.map((rentPaymentHistoryDTOObj: RentPaymentHistoryDTO) => {
+    rentPaymentsBetweenDate.forEach((rentPaymentHistoryDTOObj: RentPaymentHistoryEntity) => {
       totalRentPaymentObj.sum += rentPaymentHistoryDTOObj.rentAmount;
 
-      const rentPayment: RentPayment = this.fromRentPaymentDtoToRentPaymentGraphQlType(
-        rentPaymentHistoryDTOObj,
+      const rentPayment: RentPayment = RentPaymentHistoryMapper.fromDomainToGraphQL(
+        RentPaymentHistoryMapper.fromEntityToDomain(rentPaymentHistoryDTOObj),
       );
 
-      totalRentPaymentObj.items?.push(rentPayment);
+      totalRentPaymentObj.items.push(rentPayment);
     });
-    return totalRentPaymentObj;
-  }
 
-  // eslint-disable-next-line class-methods-use-this
-  private fromRentPaymentDtoToRentPaymentGraphQlType(
-    rentPaymentHistoryDTOObj: RentPaymentHistoryDTO,
-  ): RentPayment {
-    const rentPayment: RentPayment = {
-      contractId: rentPaymentHistoryDTOObj.contractId,
-      createdAt: rentPaymentHistoryDTOObj.created,
-      isImported: rentPaymentHistoryDTOObj.isImported,
-      rentId: rentPaymentHistoryDTOObj.id,
-      time: rentPaymentHistoryDTOObj.paymentDate,
-      updatedAt: rentPaymentHistoryDTOObj.updated,
-      value: rentPaymentHistoryDTOObj.rentAmount,
-      description: rentPaymentHistoryDTOObj.description,
-    };
-    return rentPayment;
+    return totalRentPaymentObj;
   }
 
   public deleteRentPayment(rentPaymentId: number): Promise<boolean> {

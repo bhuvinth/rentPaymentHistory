@@ -1,6 +1,6 @@
 import { createConnection, Connection } from 'typeorm';
 import RentPaymentRepository from './rentPaymentRepository';
-import RentPaymentHistoryDTO from './rentPaymentHistoryDTO';
+import RentPaymentHistoryEntity from './rentPaymentHistoryEntity';
 
 describe('Test Rent Payment Repository for Different methods', () => {
   let connection: Connection = null;
@@ -11,7 +11,7 @@ describe('Test Rent Payment Repository for Different methods', () => {
         type: 'sqlite',
         database: ':memory:',
         dropSchema: true,
-        entities: [RentPaymentHistoryDTO],
+        entities: [RentPaymentHistoryEntity],
         synchronize: true,
         logging: false,
       });
@@ -28,9 +28,9 @@ describe('Test Rent Payment Repository for Different methods', () => {
     contractId = 1,
     rentAmount = 500,
     paymentDate = new Date(),
-  ): Promise<RentPaymentHistoryDTO> {
+  ): Promise<RentPaymentHistoryEntity> {
     const rentPaymentRepository = new RentPaymentRepository();
-    const mockData = new RentPaymentHistoryDTO();
+    const mockData = new RentPaymentHistoryEntity();
     mockData.contractId = contractId;
     mockData.description = 'description';
     mockData.paymentDate = paymentDate;
@@ -42,7 +42,7 @@ describe('Test Rent Payment Repository for Different methods', () => {
     expect(savedRentPaymentData).toBeTruthy();
     expect(savedRentPaymentData.id).toBeGreaterThan(0);
     expect(savedRentPaymentData.contractId).toEqual(mockData.contractId);
-    expect(savedRentPaymentData.created).toBeDefined();
+    expect(savedRentPaymentData.createdAt).toBeDefined();
     expect(savedRentPaymentData.description).toEqual(mockData.description);
     expect(savedRentPaymentData.isImported).toEqual(mockData.isImported);
     expect(savedRentPaymentData.rentAmount).toEqual(mockData.rentAmount);
@@ -57,7 +57,7 @@ describe('Test Rent Payment Repository for Different methods', () => {
 
   test('Should fail insert, Try saving the RentPaymentData without passing contract Id', async () => {
     const rentPaymentRepository = new RentPaymentRepository();
-    const mockData = new RentPaymentHistoryDTO();
+    const mockData = new RentPaymentHistoryEntity();
 
     mockData.description = 'description';
     mockData.paymentDate = new Date();
@@ -72,7 +72,7 @@ describe('Test Rent Payment Repository for Different methods', () => {
 
   test('Should fail insert, Try saving the RentPaymentData without passing description', async () => {
     const rentPaymentRepository = new RentPaymentRepository();
-    const mockData = new RentPaymentHistoryDTO();
+    const mockData = new RentPaymentHistoryEntity();
 
     mockData.description = null;
     mockData.paymentDate = new Date();
@@ -87,7 +87,7 @@ describe('Test Rent Payment Repository for Different methods', () => {
 
   test('Should fail insert, Try saving the RentPaymentData without passing paymentDate', async () => {
     const rentPaymentRepository = new RentPaymentRepository();
-    const mockData = new RentPaymentHistoryDTO();
+    const mockData = new RentPaymentHistoryEntity();
 
     mockData.description = 'description';
     mockData.paymentDate = null;
@@ -102,7 +102,7 @@ describe('Test Rent Payment Repository for Different methods', () => {
 
   test('Should fail insert, Try saving the RentPaymentData without passing rentAmount', async () => {
     const rentPaymentRepository = new RentPaymentRepository();
-    const mockData = new RentPaymentHistoryDTO();
+    const mockData = new RentPaymentHistoryEntity();
 
     mockData.description = 'description';
     mockData.paymentDate = new Date();
@@ -117,7 +117,7 @@ describe('Test Rent Payment Repository for Different methods', () => {
 
   test('Should fail insert, Try saving the RentPaymentData without passing isImported', async () => {
     const rentPaymentRepository = new RentPaymentRepository();
-    const mockData = new RentPaymentHistoryDTO();
+    const mockData = new RentPaymentHistoryEntity();
 
     mockData.description = 'description';
     mockData.paymentDate = new Date();

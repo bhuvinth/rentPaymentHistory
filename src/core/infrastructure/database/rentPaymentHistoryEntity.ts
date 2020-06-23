@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'rent_payments' })
-export default class RentPaymentHistoryDTO {
+export default class RentPaymentHistoryEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
@@ -30,8 +30,8 @@ export default class RentPaymentHistoryDTO {
   public isDeleted: boolean;
 
   @CreateDateColumn()
-  public created: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn()
-  public updated: Date;
+  public updatedAt: Date;
 }
