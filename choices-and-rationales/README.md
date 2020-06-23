@@ -55,7 +55,7 @@ The application uses PostgresDB. I chose PostgresDB since, it was mentioned in t
 ### 4. Dependency Injections: 
 In general, I would go for dependency injections and refrain from using the new operator in the project. 
 This has several advantages like it makes the code easily testable, and reusable. 
-But since, the size of the code right now is small. I have not used dependency injections.
+But since, the size of the code right now is small. I have not used dependency injections library. But I have made some dependencies like Application-Service injectable. I am injecting a Mocked Repository instance in the Application-service to test it.
 
 ### 5. Docker-compose:
 *Remark:* I have handled the part where the application docker waits for the Postgres docker to be ready in the application code.
