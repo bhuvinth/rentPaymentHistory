@@ -18,13 +18,16 @@ To install all dependencies run the following command:
 npm install
 ```
 
+#### Create the .env file from .env.example
+You would need to create a .env file for the application to run. 
+You can directly copy the values from .env.example to a new .env file. 
+
 #### Starting application
 
 Finally you can start the Rent Payment History Application server:
 
 ```
 npm run start
-
 ```
 This would be running based on docker-compose. So please install the docker-compose before running this.
 This would take some time, since it would build the relevant dockers and start the application. 
@@ -34,7 +37,7 @@ Or you can [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getp
 
 The export is also provided in the [repository](tenantPaymentHistory.postman_collection.json)
 
-Currently the "Authorization" Token has been hardcoded to 8xjM8PF9XC7KVUQ. 
+Currently the "Authorization" Token has been set in .env.example to 8xjM8PF9XC7KVUQ. 
 So you would need to pass this as a header:
 ```
 {"Authorization": "8xjM8PF9XC7KVUQ"}
