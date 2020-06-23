@@ -53,5 +53,6 @@ You can also see the test coverage using:
 ```
 npm run test:coverage
 ```
-Though it's not very high but I have tried to do it for the logical parts.
+I have tried to write tests for for the logical parts.
 
+Please find the choices and rationales [here](./choices-and-rationales/README.md)
