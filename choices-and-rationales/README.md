@@ -26,7 +26,7 @@ Pros:
 Cons:
   - This approach is not suitable for a Microservices architecture based application.
 In this case, a good way to go about would be using a backend for frontend which serves as a GraphQL layer, whereas the Microservices   would act as the Datasources for this application. 
-  - An example: We can use AWS AppSync (or a hosted GraphQL server) as a Backend-for-frontend, and then connect different data sources that correspond to our different microservices based on REST APIs or  MongoDataSource, etc. 
+An example: We can use AWS AppSync (or a hosted GraphQL server) as a Backend-for-frontend, and then connect different data sources that correspond to our different microservices based on REST APIs or  MongoDataSource, etc. 
   For explaining what I mean please find the example as below:
     
     ![Example for explaining GraphQL example](./GraphQLExample.png?raw=true "Example for explaining GraphQL example")
@@ -44,8 +44,8 @@ The Flow of the Request:
   2. This is where the responsibility for Application Service layer begins. These types are then used as input to create Domain object, and hence it verifies if the GraphQL input adheres to the Domain rules. Just to illustrate a Validation rule, ContractId is number but cannot be lesser than or equal to 0. Similarly for rent value, it is a number but it can be negative, or positive but cannot be 0. These rules are implemented in the Domain type itself using Value objects.
   3. Once the Domain object is successfully created the Application Service converts it to the Database Entity type, and then calls the Repository.
   4. The Repository stores the data in the database, and returns the Entity.
-  5. This Entity is again converted back to Domain, This is being done since there might be some mappings/ conversions/ enrichments being done on the Entity layer which might be specific to Domain. And eventually to GraphQL type so that it could be return. 
-This gives us a chance to do any Business rule validations segregated from the Application services. 
+  5. This Entity is again converted back to Domain, This is being done since there might be some mappings/ conversions/ enrichments being done on the data coming from database layer which might be specific to Domain, for an e.g.: Full name from First name and Last Name. And eventually to GraphQL type so that it could be returned. 
+This gives us a chance to keep Business rule validations segregated from the Application services. 
 Please find the image as below to illustrate above flow:
 ![Explanation for Code organization](./RequestFlowAndTypeConversions.png?raw=true "Request flow and type conversions ")
 
