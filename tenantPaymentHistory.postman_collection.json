@@ -51,7 +51,7 @@
 					"mode": "graphql",
 					"graphql": {
 						"query": "# Write your query or mutation here\nquery getListOfPayments($contractId:Int! , $startDate:Date!, $endDate:Date!){\n  getListOfPayments(contractId: $contractId, startDate: $startDate, endDate:$endDate)\n  {\n    sum\n\t\titems{\n      rentId\n\t\t\tcontractId\n      description\n      value\n      time\n      isImported\n      createdAt\n      updatedAt\n    }\n  }\n}\n\n",
-						"variables": "{\n  \"contractId\": 2, \n  \"startDate\": \"2020-01-01T01:35:18.291Z\",\n  \"endDate\":\"2020-06-21T01:35:18.291Z\"\n}\n"
+						"variables": "{\n  \"contractId\": 17689, \n  \"startDate\": \"2001-01-01T01:35:18.291Z\",\n  \"endDate\":\"2020-06-21T01:35:18.291Z\"\n}\n"
 					},
 					"options": {
 						"graphql": {}
@@ -173,7 +173,10 @@
 					"mode": "graphql",
 					"graphql": {
 						"query": "mutation updateRentPayment ($updateRentPaymentInput:RentPaymentUpdateInput! ){\n  updateRentPayment(updateRentPaymentInput: $updateRentPaymentInput)\n  {\n    rentId\n    contractId\n    description\n    value\n    updatedAt\n    time\n  }\n}",
-						"variables": "{\n  \"updateRentPaymentInput\":{\n   \"description\": \"rent has been paid\",\n   \"value\": -5001,\n    \"isImported\": true,\n\t\"rentId\": 6\n  }\n}"
+						"variables": "{\n  \"updateRentPaymentInput\":{\n   \"description\": \"rent has been paid\",\n   \"value\": 100,\n    \"isImported\": true,\n\t\"rentId\": 2\n  }\n}"
+					},
+					"options": {
+						"graphql": {}
 					}
 				},
 				"url": {
@@ -236,7 +239,10 @@
 					"mode": "graphql",
 					"graphql": {
 						"query": "mutation deleteRentPayment($rentPaymentId:Int!) {\n  deleteRentPayment(rentPaymentId: $rentPaymentId)\n}",
-						"variables": "{\n  \"rentPaymentId\": 6000\n}"
+						"variables": "{\n  \"rentPaymentId\": 3\n}"
+					},
+					"options": {
+						"graphql": {}
 					}
 				},
 				"url": {
