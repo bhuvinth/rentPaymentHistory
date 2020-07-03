@@ -55,4 +55,5 @@ npm run test:coverage
 ```
 I have tried to write tests to cover the Logical parts.
 
+#### Choices & Rationales
 Please find the choices and rationales [here](./choices-and-rationales/README.md)
