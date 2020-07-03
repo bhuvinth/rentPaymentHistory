@@ -1,7 +1,24 @@
 # Choices And Rationales
-Hi Team,
-
 It was fun to do this.
+
+## Assumptions
+I would like to start with some assumptions which I have made for the ease of this assignment:
+### Assumption 1: The data is **limited** 
+I have currently assumed that the data for the rent payment for a tenant is limited i.e. we can get the data from the persistence in one go. 
+
+If the assumption is not to be made then the solution can change in below mentioned ways:
+
+Currently, I calculate the sum in the code while fetching the rent payments for the *getListOfPayments* query, assuming that the data is limited.
+
+- Calculate the sum in the database of all the tenant payments.
+- The data for tenant payments will be returned as paginated data, i.e., with an upper limit to fetch the data on a page. 
+So, this would work like: the Data displayed on Bank Applications for the Account balance.
+- Create relevant indexes in the database for doing this, so that the Database processing doesn't take a toll as well.
+
+This can have an impact on lot of other things as well.
+
+
+## Rationales
 
 Before going to explain the rationales;
 
