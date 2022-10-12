@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/bhuvinth/rentPaymentHistory#readme",
   "dependencies": {
-    "apollo-server": "^2.15.0",
+    "apollo-server": "^2.25.4",
     "dotenv-safe": "^8.2.0",
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.3",
